@@ -47,8 +47,8 @@ void Player::update(const float deltaTime) {
     animation.update(currTexture, deltaTime);
     body.setTextureRect(animation.rect);
 
-    sf::FloatRect bounds = body.getLocalBounds();
-    body.setOrigin({bounds.size.x / 2.f, bounds.size.y / 2.f});
+    // sf::FloatRect bounds = body.getLocalBounds();
+    // body.setOrigin({bounds.size.x / 2.f, bounds.size.y / 2.f});
 
     body.move(movement);
 }

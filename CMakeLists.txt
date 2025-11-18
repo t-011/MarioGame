@@ -17,6 +17,7 @@ add_executable(MarioGame main.cpp
         Collider.cpp
         Collider.h
         Platform.cpp
-        Platform.h)
+        Platform.h
+        MapLoader.h)
 target_link_libraries(MarioGame PRIVATE SFML::Graphics SFML::Window SFML::System SFML::Audio)
 target_link_options(MarioGame PRIVATE -static-libstdc++ -static-libgcc)

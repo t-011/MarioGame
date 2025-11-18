@@ -2,18 +2,20 @@
 // Created by tariq on 11/18/2025.
 //
 
-#ifndef MARIOGAME_PLATFORM_H
-#define MARIOGAME_PLATFORM_H
+#ifndef MARIOGAME_TILE_H
+#define MARIOGAME_TILE_H
 
 #include <SFML/Graphics.hpp>
 
 #include "Collider.h"
 
-class Platform {
+class Tile {
 public:
-    Platform(sf::Texture& texture, sf::Vector2f scale, sf::Vector2f position);
+    Tile(const sf::Texture& texture, sf::Vector2f scale, sf::Vector2f position);
 
     void draw(sf::RenderWindow &window) const;
+
+    const sf::Sprite& getBody() const { return body; }
 
     Collider &getCollider() { return collider; }
 
@@ -23,4 +25,4 @@ private:
 };
 
 
-#endif //MARIOGAME_PLATFORM_H
+#endif //MARIOGAME_TILE_H

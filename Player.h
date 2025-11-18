@@ -25,7 +25,7 @@ private:
     sf::Sprite body;
     Animation animation;
     float speed;
-    TextureManager textureManager;
+    TextureManager& textureManager;
     Collider collider;
 };
 

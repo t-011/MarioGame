@@ -3,27 +3,30 @@
 #include "Animation.h"
 #include "Platform.h"
 #include "Player.h"
+#include "MapLoader.h"
 
-static constexpr sf::Vector2u STARTING_WINDOW_SIZE({512, 512});
+static constexpr sf::Vector2u STARTING_WINDOW_SIZE({1400, 700});
 
 void resizeView(const sf::Window& window, sf::View& view);
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(STARTING_WINDOW_SIZE), "Mario Game");
+    sf::RenderWindow window(sf::VideoMode(STARTING_WINDOW_SIZE), "Mario Game", sf::Style::Close | sf::Style::Titlebar);
     TextureManager textureManager{};
+
+    sf::View bgView(sf::FloatRect({0, 0}, {STARTING_WINDOW_SIZE.x, STARTING_WINDOW_SIZE.y}));
+
+    sf::RectangleShape background{sf::Vector2f(STARTING_WINDOW_SIZE)};
+    background.setTexture(&textureManager.getTexture(TextureManager::TextureId::BG));
 
     sf::View view{window.getView()};
 
-    sf::Sprite background(textureManager.getTexture(TextureManager::TextureId::BG));
-
+    LevelData level = MapLoader::loadLevel(textureManager);
 
     constexpr float FRAME_SWITCH_TIME = 0.3f;
     constexpr float PLAYER_SPEED = 50.f;
     Player player(textureManager, FRAME_SWITCH_TIME, PLAYER_SPEED);
-
-    Platform platform1(textureManager.getTexture(TextureManager::TextureId::IDLE), {1.f, 1.f}, {500, 200});
-    Platform platform2(textureManager.getTexture(TextureManager::TextureId::IDLE), {1.f, 1.f}, {500, 0});
+    player.setPosition(level.playerSpawnPos);
 
     float deltaTime{};
     sf::Clock clock;
@@ -45,21 +48,21 @@ int main()
 
         player.update(deltaTime);
 
-        player.getCollider().resolveCollision(platform1.getCollider(), 1.f);
-        player.getCollider().resolveCollision(platform2.getCollider(), 0.f);
+        for (auto& platform : level.collisionPlatforms) {
+            player.getCollider().resolveCollision(platform.getCollider(), 1.f);
+        }
 
         view.setCenter(player.getPosition());
         window.clear();
 
-        window.setView(window.getDefaultView());
+        window.setView(bgView);
         window.draw(background);
 
         window.setView(view);
 
-
+        window.draw(level.tileVertices, level.tileTexture);
         player.draw(window);
-        platform1.draw(window);
-        platform2.draw(window);
+
         window.display();
     }
 
