@@ -12,8 +12,8 @@ Animation::Animation(const TextureManager&  textureManager, const float switchTi
     : textureManager(textureManager), switchTime(switchTime)
 {
 
-    rect.size.x = textureManager.TEXTURE_SIZE.x;
-    rect.size.y = textureManager.TEXTURE_SIZE.y;
+    rect.size.x = textureManager.CHARACTER_SIZE.x;
+    rect.size.y = textureManager.CHARACTER_SIZE.y;
 }
 
 void Animation::update(pTexture texture, const float deltaTime) {

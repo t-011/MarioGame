@@ -5,7 +5,7 @@
 
 Player::Player(TextureManager& textureManager, float switchTime, float speed)
     : currTexture(pTexture::IDLE), body(textureManager.getTexture(currTexture)), animation(textureManager, switchTime),
-        speed(speed), textureManager(textureManager)
+        speed(speed), textureManager(textureManager), collider(body)
 {
     body.setTextureRect(animation.rect);
 
@@ -21,6 +21,12 @@ void Player::update(const float deltaTime) {
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::D)) {
         movement.x += speed * deltaTime;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W)) {
+        movement.y -= speed * deltaTime;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::S)) {
+        movement.y += speed * deltaTime;
     }
 
     if (movement.x == 0.f) {
@@ -40,6 +46,10 @@ void Player::update(const float deltaTime) {
     body.setTexture(textureManager.getTexture(currTexture));
     animation.update(currTexture, deltaTime);
     body.setTextureRect(animation.rect);
+
+    sf::FloatRect bounds = body.getLocalBounds();
+    body.setOrigin({bounds.size.x / 2.f, bounds.size.y / 2.f});
+
     body.move(movement);
 }
 

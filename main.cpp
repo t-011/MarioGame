@@ -1,9 +1,10 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
+#include "Platform.h"
 #include "Player.h"
 
-static constexpr sf::Vector2u STARTING_WINDOW_SIZE({800, 600});
+static constexpr sf::Vector2u STARTING_WINDOW_SIZE({512, 512});
 
 void resizeView(const sf::Window& window, sf::View& view);
 
@@ -14,10 +15,15 @@ int main()
 
     sf::View view{window.getView()};
 
+    sf::Sprite background(textureManager.getTexture(TextureManager::TextureId::BG));
+
+
     constexpr float FRAME_SWITCH_TIME = 0.3f;
     constexpr float PLAYER_SPEED = 50.f;
     Player player(textureManager, FRAME_SWITCH_TIME, PLAYER_SPEED);
-    player.setPosition(sf::Vector2f(window.getSize().x / 2.f, window.getSize().y / 2.f));
+
+    Platform platform1(textureManager.getTexture(TextureManager::TextureId::IDLE), {1.f, 1.f}, {500, 200});
+    Platform platform2(textureManager.getTexture(TextureManager::TextureId::IDLE), {1.f, 1.f}, {500, 0});
 
     float deltaTime{};
     sf::Clock clock;
@@ -35,14 +41,25 @@ int main()
                 resizeView(window, view);
             }
         }
+
+
         player.update(deltaTime);
+
+        player.getCollider().resolveCollision(platform1.getCollider(), 1.f);
+        player.getCollider().resolveCollision(platform2.getCollider(), 0.f);
+
         view.setCenter(player.getPosition());
         window.clear();
+
+        window.setView(window.getDefaultView());
+        window.draw(background);
 
         window.setView(view);
 
 
         player.draw(window);
+        platform1.draw(window);
+        platform2.draw(window);
         window.display();
     }
 

@@ -5,7 +5,7 @@
 #include "TextureManager.h"
 
 class Animation {
-    using pTexture = TextureManager::PlayerTexture;
+    using pTexture = TextureManager::TextureId;
 public:
     Animation(const TextureManager&  textureManager, float switchTime);
     void update(pTexture texture, float deltaTime);

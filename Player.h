@@ -7,9 +7,10 @@
 
 #include  <SFML/Graphics.hpp>
 #include  "Animation.h"
+#include "Collider.h"
 
 class Player {
-    using pTexture = TextureManager::PlayerTexture;
+    using pTexture = TextureManager::TextureId;
 public:
     Player(TextureManager& textureManager, float switchTime, float speed);
 
@@ -17,6 +18,7 @@ public:
     void draw(sf::RenderWindow& window) const;
     void setPosition(sf::Vector2f position);
     sf::Vector2f getPosition() const;
+    Collider& getCollider() { return collider; }
 
 private:
     pTexture currTexture;
@@ -24,6 +26,7 @@ private:
     Animation animation;
     float speed;
     TextureManager textureManager;
+    Collider collider;
 };
 
 

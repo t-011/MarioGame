@@ -8,27 +8,18 @@
 
 
 TextureManager::TextureManager()
-    : textureMap(std::unordered_map<PlayerTexture, TextureInfo>())
 {
-    sf::Texture textureIdleAnim;
-    sf::Texture textureRunAnim;
-    sf::Texture textureJumpAnim;
-    if (!textureIdleAnim.loadFromFile("Pink_Monster_Idle.png") ||
-        !textureRunAnim.loadFromFile("Pink_Monster_Run.png") ||
-        !textureJumpAnim.loadFromFile("Pink_Monster_Jump.png")) {
-        std::cout << "Failed to load texture!\n";
-        exit(1);
-    }
-
-    textureMap.insert({PlayerTexture::IDLE, {textureIdleAnim, {4, 1}}});
-    textureMap.insert({PlayerTexture::RUN, {textureRunAnim, {6, 1}}});
-    textureMap.insert({PlayerTexture::JUMP, {textureJumpAnim, {8, 1}}});
+    textureVec.emplace_back("Pink_Monster_Idle.png", sf::Vector2u{4, 1});
+    textureVec.emplace_back("Pink_Monster_Run.png", sf::Vector2u{6, 1});
+    textureVec.emplace_back("Pink_Monster_Jump.png", sf::Vector2u{8, 1});
+    textureVec.emplace_back("landscape.png", sf::Vector2u{16, 1});
+    textureVec.emplace_back("vantablack.jpg", sf::Vector2u{16, 1});
 }
 
-sf::Texture & TextureManager::getTexture(PlayerTexture texture) {
-    return textureMap[texture].texture;
+sf::Texture & TextureManager::getTexture(TextureId texture) {
+    return textureVec[static_cast<size_t>(texture)].texture;
 }
 
-sf::Vector2u TextureManager::getTextureSize(PlayerTexture texture) {
-    return textureMap[texture].size;
+sf::Vector2u TextureManager::getTextureSize(TextureId texture) {
+    return textureVec[static_cast<size_t>(texture)].size;
 }
