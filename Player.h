@@ -12,10 +12,12 @@
 class Player {
     using pTexture = TextureManager::TextureId;
 public:
-    Player(TextureManager& textureManager, float switchTime, float speed);
+    Player(TextureManager& textureManager, float switchTime, float speed, float jumpHeight);
 
     void update(float deltaTime);
     void draw(sf::RenderWindow& window) const;
+    void onCollision(Collider::CollisionResult& cr);
+
     void setPosition(sf::Vector2f position);
     sf::Vector2f getPosition() const;
     Collider& getCollider() { return collider; }
@@ -27,6 +29,10 @@ private:
     float speed;
     TextureManager& textureManager;
     Collider collider;
+
+    sf::Vector2f velocity;
+    bool canJump = false;
+    float jumpHeight;
 };
 
 

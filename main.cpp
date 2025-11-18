@@ -25,7 +25,7 @@ int main()
 
     constexpr float FRAME_SWITCH_TIME = 0.3f;
     constexpr float PLAYER_SPEED = 50.f;
-    Player player(textureManager, FRAME_SWITCH_TIME, PLAYER_SPEED);
+    Player player(textureManager, FRAME_SWITCH_TIME, PLAYER_SPEED, 200);
     player.setPosition(level.playerSpawnPos);
 
     float deltaTime{};
@@ -33,7 +33,7 @@ int main()
 
     while (window.isOpen()) {
 
-        deltaTime = clock.restart().asSeconds();
+        deltaTime = std::min(clock.restart().asSeconds(), 1.f / 60.f);
 
         while (const std::optional event = window.pollEvent()) {
 
@@ -49,7 +49,9 @@ int main()
         player.update(deltaTime);
 
         for (auto& platform : level.collisionPlatforms) {
-            player.getCollider().resolveCollision(platform.getCollider(), 1.f);
+            if (auto res = player.getCollider().resolveCollision(platform.getCollider(), 1.f)) {
+                player.onCollision(res.value());
+            }
         }
 
         view.setCenter(player.getPosition());

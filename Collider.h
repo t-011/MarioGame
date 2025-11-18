@@ -9,8 +9,13 @@
 
 class Collider {
 public:
+    struct CollisionResult {
+        sf::Vector2f point;
+        sf::Vector2f normal;
+    };
+
     explicit Collider(sf::Sprite&  sprite);
-    bool resolveCollision(Collider& other, float push = 1.f);
+    std::optional<CollisionResult> resolveCollision(Collider& other, float push = 1.f);
 
 private:
     sf::Sprite& body;
