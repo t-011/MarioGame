@@ -8,8 +8,8 @@
 #include <iostream>
 #include <utility>
 
-Collider::Collider(sf::Sprite& sprite)
-    : body(sprite)
+Collider::Collider(sf::Sprite& sprite, CollidingObject co)
+    : body(sprite), object(co)
 {}
 
 /*
@@ -49,7 +49,7 @@ std::optional<Collider::CollisionResult> Collider::resolveCollision(Collider& ot
     float centerY = (std::max(bounds.position.y, otherBounds.position.y) +
                      std::min(bounds.position.y + bounds.size.y, otherBounds.position.y + otherBounds.size.y)) / 2.f;
 
-    return CollisionResult{{centerX, centerY}, normal};
+    return CollisionResult{{centerX, centerY}, normal, other.object};
 }
 
 

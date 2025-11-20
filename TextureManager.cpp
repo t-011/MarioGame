@@ -15,7 +15,8 @@ TextureManager::TextureManager()
     textureVec.emplace_back("Pink_Monster_Run.png", sf::Vector2u{6, 1});
     textureVec.emplace_back("Pink_Monster_Jump.png", sf::Vector2u{8, 1});
     textureVec.emplace_back("landscape.png", sf::Vector2u{16, 1});
-    textureVec.emplace_back("vantablack.jpg", sf::Vector2u{1, 1});
+    textureVec.emplace_back("Tile.png", sf::Vector2u{1, 1});
+    textureVec.emplace_back("meme.jpg", sf::Vector2u{1, 1});
 }
 
 sf::Texture& TextureManager::getTexture(TextureId texture) {

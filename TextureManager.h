@@ -10,7 +10,7 @@
 
 class TextureManager { // Assuming all textures are one row
 public:
-    enum class TextureId : size_t {IDLE = 0, RUN, JUMP, BG, GROUND};
+    enum class TextureId : size_t {IDLE = 0, RUN, JUMP, BG, GROUND, ENEMY};
 
     TextureManager();
     sf::Texture& getTexture(TextureId texture);

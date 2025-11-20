@@ -9,7 +9,7 @@
 
 Player::Player(TextureManager& textureManager, float switchTime, float speed, float jumpHeight)
     : currTexture(pTexture::IDLE), body(textureManager.getTexture(currTexture)), animation(textureManager, switchTime),
-        speed(speed), textureManager(textureManager), collider(body), jumpHeight(jumpHeight)
+        speed(speed), textureManager(textureManager), collider(body, Collider::CollidingObject::PLAYER), jumpHeight(jumpHeight)
 {
     body.setTextureRect(animation.rect);
 
@@ -19,7 +19,8 @@ Player::Player(TextureManager& textureManager, float switchTime, float speed, fl
 
 void Player::update(const float deltaTime) {
 
-    velocity.x = 0.f;
+    constexpr float GRAVITY = 981.f;
+    velocity.x = 0.f; // needed
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::A)) {
         velocity.x -= speed;
@@ -29,16 +30,15 @@ void Player::update(const float deltaTime) {
         velocity.x += speed;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space) && canJump
-            && (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::A) || true)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space) && canJump) {
         canJump = false;
 
-        velocity.y = -sqrtf(2.0f * 981.f * jumpHeight);
+        velocity.y = -sqrtf(2.0f * GRAVITY * jumpHeight);
     }
 
 
 
-    velocity.y += 981.f * deltaTime;
+    velocity.y += GRAVITY * deltaTime;
 
     if (velocity.x == 0.f) {
         currTexture = pTexture::IDLE; // Idle animation
@@ -71,12 +71,23 @@ void Player::draw(sf::RenderWindow& window) const {
 void Player::onCollision(Collider::CollisionResult& cr) {
 
     if (cr.normal.x < 0.f) {
-        // collision on left
-        velocity.x = 0.0;
+        if (cr.object == Collider::CollidingObject::TILE) {
+            // collision on left
+            velocity.x = 0.0;
+        }
+        else if (cr.object == Collider::CollidingObject::ENEMY) {
+            isDead = true;
+        }
     }
+    // collision on right
     else if (cr.normal.x > 0.f) {
-        // collision on right
-        velocity.x = 0.0;
+        if (cr.object == Collider::CollidingObject::TILE) {
+            velocity.x = 0.0;
+        }
+        else if (cr.object == Collider::CollidingObject::ENEMY) {
+            velocity.x = 0.0;
+            isDead = true;
+        }
     }
     if (cr.normal.y < 0.f) {
         // collision on bottom

@@ -14,11 +14,12 @@ struct LevelData {
     const sf::Texture* tileTexture;
     std::vector<Tile> collisionPlatforms;
     sf::Vector2f playerSpawnPos;
+    std::vector<sf::Vector2f> enemiesSpawnPos;
 };
 
 class MapLoader {
 public:
-    static constexpr int TILE_SIZE = 32;
+    static constexpr int TILE_SIZE = 24;
     static constexpr int MAP_WIDTH = 50;
     static constexpr int MAP_HEIGHT = 22;
 
@@ -43,7 +44,7 @@ public:
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,2,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
-        {1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
+        {1,1,1,0,0,0,0,3,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
     };
@@ -62,9 +63,13 @@ public:
                 float posX = static_cast<float>(x * TILE_SIZE);
                 float posY = static_cast<float>(y * TILE_SIZE);
 
-                if (tiles[y][x] == 1 || tiles[y][x] == 2) {
+                if (tiles[y][x] == 1 || tiles[y][x] == 2 || tiles[y][x] == 3) {
                     if (tiles[y][x] == 2) {
                         level.playerSpawnPos = {posX + TILE_SIZE/2.f, posY - 32.f};
+                    }
+                    else if (tiles[y][x] == 3) {
+                        level.enemiesSpawnPos.emplace_back(posX + TILE_SIZE/2.f, posY - 32.f);
+                        continue;
                     }
 
                     // Create 2 triangles (6 vertices) for each quad

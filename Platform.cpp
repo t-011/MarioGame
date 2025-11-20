@@ -5,7 +5,7 @@
 #include "Platform.h"
 
 Tile::Tile(const sf::Texture& texture, sf::Vector2f scale, sf::Vector2f position)
-    : body(texture), collider(body)
+    : body(texture), collider(body, Collider::CollidingObject::TILE)
 {
     body.setScale(scale);
     body.setPosition(position);

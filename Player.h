@@ -22,6 +22,9 @@ public:
     sf::Vector2f getPosition() const;
     Collider& getCollider() { return collider; }
 
+public:
+    bool isDead = false;;
+
 private:
     pTexture currTexture;
     sf::Sprite body;
@@ -30,7 +33,7 @@ private:
     TextureManager& textureManager;
     Collider collider;
 
-    sf::Vector2f velocity;
+    sf::Vector2f velocity{};
     bool canJump = false;
     float jumpHeight;
 };
